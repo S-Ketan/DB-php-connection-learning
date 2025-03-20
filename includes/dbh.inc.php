@@ -1,4 +1,5 @@
-<?
+<?php
+
 $dsn = 'mysql:host=locakhost;dbname=myfirstdatabase';
 $dbusername = 'root';
 $dbpassword = '';
