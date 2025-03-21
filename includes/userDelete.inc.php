@@ -2,15 +2,17 @@
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
-    $email = $_POST['email'];
+   
     $pwd = $_POST['pwd'];
 
     try {
         require_once 'dbh.inc.php';
-        $query = "INSERT INTO users (username, email, pwd) VALUES (?, ?, ?);";
+        $query = "DELETE FROM users WHERE username = :username AND pwd = :pwd;";
         $stmt = $pdo->prepare($query);
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":pwd", $pwd);
 
-        $stmt -> execute([$username, $email, $pwd]);
+        $stmt -> execute();
         header("Location: ../index.php");
         exit();
 
