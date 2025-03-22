@@ -7,10 +7,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         require_once 'dbh.inc.php';
-        $query = "INSERT INTO users (username, email, pwd) VALUES (?, ?, ?);";
+        $query = "INSERT INTO users (username, email, pwd) VALUES (:username, :email, :pwd);";
         $stmt = $pdo->prepare($query);
 
-        $stmt -> execute([$username, $email, $pwd]);
+        $options = [
+            'cost' => 12,
+        ];
+
+        $hashedpwd = password_hash($pwd, PASSWORD_BCRYPT, $options);
+        
+        $stmt->bindParam(':pwd', $hashedpwd);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt -> execute();
         header("Location: ../index.php");
         exit();
 
